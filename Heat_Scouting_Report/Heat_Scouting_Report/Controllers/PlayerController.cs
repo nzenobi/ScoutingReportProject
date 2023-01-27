@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.RequestValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScoutingReportDAL.Db;
@@ -24,6 +25,25 @@ namespace Heat_Scouting_Report.Controllers
             _logger = logger;
             _playerService = playerService;
         }
+
+        [HttpGet]
+        [RouteAttribute("roster")]
+        public async Task<ActionResult> GetRoster([FromQuery] RosterRequest rosterRequest)
+        {
+            _logger.LogInformation($"Incoming get roster request: {rosterRequest.ToString()}");
+
+            List<Player> roster = await _playerService.GetRoster(rosterRequest);
+
+            if(roster != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, roster);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching roster" });
+            }
+        }
+
 
         [HttpGet]
         public List<Player> QueryPlayers([FromQuery] ActivePlayerRequest activePlayerRequest)

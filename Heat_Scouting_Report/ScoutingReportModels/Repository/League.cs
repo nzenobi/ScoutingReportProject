@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -19,9 +20,11 @@ namespace ScoutingReportModels
         public bool? ActiveSource { get; set; }
         public int? LeagueGroupKey { get; set; }
         public int? LeagueCustomGroupKey { get; set; }
+        [JsonIgnore]
         public bool? SearchDisplayFlag { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Team> TeamLeagueKeyDomesticNavigations { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Team> TeamLeagueKeyNavigations { get; set; }
     }
 }

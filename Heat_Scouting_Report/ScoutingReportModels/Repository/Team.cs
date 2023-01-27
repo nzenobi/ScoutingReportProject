@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -26,8 +27,11 @@ namespace ScoutingReportModels
         public string Urlphoto { get; set; }
         public bool? CurrentNbateamFlg { get; set; }
 
+        [JsonIgnore]
         public virtual League LeagueKeyDomesticNavigation { get; set; }
+        [JsonIgnore]
         public virtual League LeagueKeyNavigation { get; set; }
+        [JsonIgnore]
         public virtual ICollection<TeamPlayer> TeamPlayers { get; set; }
     }
 }

@@ -17,6 +17,33 @@ namespace ScoutingReportDAL.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<List<Team>> GetTeams(int leagueId)
+        {
+            return await _dbContext.Teams.Where(t => t.LeagueKey == leagueId).ToListAsync();
+        }
+
+        public async Task<List<League>> GetLeagues()
+        {
+            return await _dbContext.Leagues.Where(l => l.SearchDisplayFlag == true).ToListAsync();
+
+        }
+
+        public async Task<List<Player>> GetRoster(RosterRequest rosterRequest)
+        {
+            IQueryable<TeamPlayer> rosterQuery = _dbContext.TeamPlayers
+                .Include(tp => tp.PlayerKeyNavigation)
+                .Where(tp => tp.SeasonKey == rosterRequest.SeasonId && tp.TeamKey == rosterRequest.TeamId);
+
+            if(rosterRequest.ActiveOnly)
+            {
+                rosterQuery.Where(tp => tp.ActiveTeamFlg == true);
+            }
+
+            List<Player> roster = await rosterQuery.Select(tp => tp.PlayerKeyNavigation).ToListAsync();
+
+            return roster;
+        }
+
         public async Task<List<User>> GetActiveScouts()
         {
             return await _dbContext.Users.Where(u => u.ActiveFlag == true).ToListAsync();

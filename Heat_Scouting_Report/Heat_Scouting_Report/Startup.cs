@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using ScoutingReportDAL.Db;
 using ScoutingReportDAL.Repositories;
 using ScoutingReportServices;
+using ScoutingReportServices.LeagueService;
+using ScoutingReportServices.TeamService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +40,8 @@ namespace Heat_Scouting_Report
             services.AddScoped<IScoutingReportService, ScoutingReportService>();
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<IUserService, UserService>();
-            
+            services.AddScoped<ILeagueService, LeagueService>();
+            services.AddScoped<ITeamService, TeamService>();
             services.AddControllers();
         }
 
