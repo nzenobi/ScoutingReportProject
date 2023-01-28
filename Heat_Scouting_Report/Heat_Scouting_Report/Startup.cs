@@ -65,7 +65,7 @@ namespace Heat_Scouting_Report
             });
 
 
-            var db = services.GetService<ScoutingReportDbContext>();
+            ScoutingReportDbContext db = services.GetService<ScoutingReportDbContext>();
             db.Database.Migrate();
         }
     }

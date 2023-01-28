@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -17,8 +18,11 @@ namespace ScoutingReportModels
 
         public DateTime CreatedDateTime { get; set; }
         public DateTime? ModifiedDateTime { get; set; }
+        [JsonIgnore]
         public bool IsActive { get; set; }
+        [JsonIgnore]
         public virtual Player Player { get; set; }
+        [JsonIgnore]
         public virtual User Scout { get; set; }
     }
 }

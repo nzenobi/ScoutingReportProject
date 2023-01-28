@@ -76,7 +76,7 @@ namespace ScoutingReportServices
                 scoutingReportResponse.teamId = team.TeamKey;
                 scoutingReportResponse.players = new List<PlayerScoutingReportResponse>();
 
-                var groupedByPlayer = entry.Value.GroupBy(p => p.Player).ToDictionary(g => g.Key, g => g.ToList());
+                Dictionary<Player, List<ScoutingReport>> groupedByPlayer = entry.Value.GroupBy(p => p.Player).ToDictionary(g => g.Key, g => g.ToList());
 
                 foreach (KeyValuePair<Player, List<ScoutingReport>> playerReportEntry in groupedByPlayer)
                 {
