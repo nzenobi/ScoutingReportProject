@@ -62,13 +62,34 @@ namespace ScoutingReportServices
 
             List<ScoutingReportResponse> scoutingReportResponses = new List<ScoutingReportResponse>();
 
-            Dictionary<int, List<ScoutingReport>> groupedScoutingReports = reports.GroupBy(reports => reports.Player.TeamPlayers.FirstOrDefault().TeamKey).ToDictionary(g => g.Key, g => g.ToList());
+            // Manually group up scouting reports by team. Must do this to deal with the case where players have multiple 
+            // active teams (Player ID: 91492). In this case we are going to show the scouting report under both teams.
+            Dictionary<Team, List<ScoutingReport>> groupedScoutingReports = new Dictionary<Team, List<ScoutingReport>>();
+            foreach (ScoutingReport report in reports)
+            {
+                foreach(TeamPlayer teamPlayer in report.Player.TeamPlayers)
+                {
+                    if(groupedScoutingReports.ContainsKey(teamPlayer.TeamKeyNavigation))
+                    {
+                        if(!groupedScoutingReports[teamPlayer.TeamKeyNavigation].Any(r => r.ScoutingReportId == report.ScoutingReportId))
+                        {
+                            groupedScoutingReports[teamPlayer.TeamKeyNavigation].Add(report);
+                        }
+                    }
+                    else
+                    {
+                        groupedScoutingReports[teamPlayer.TeamKeyNavigation] = new List<ScoutingReport>() { report };
+                    }
+                }
+            }
 
-            foreach (KeyValuePair<int, List<ScoutingReport>> entry in groupedScoutingReports)
+            //Dictionary<int, List<ScoutingReport>> groupedScoutingReports = reports.GroupBy(reports => reports.Player.TeamPlayers.FirstOrDefault().TeamKey).ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (KeyValuePair<Team, List<ScoutingReport>> entry in groupedScoutingReports)
             {
                 ScoutingReportResponse scoutingReportResponse = new ScoutingReportResponse();
 
-                Team team = entry.Value.First().Player.TeamPlayers.First().TeamKeyNavigation;
+                Team team = entry.Key;
 
 
                 scoutingReportResponse.conference = team.Conference;

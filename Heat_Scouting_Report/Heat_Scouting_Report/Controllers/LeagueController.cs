@@ -26,7 +26,7 @@ namespace Heat_Scouting_Report.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> GetActiveLeagues()
+        public async Task<IActionResult> GetActiveLeagues()
         {
             _logger.LogInformation($"Incoming get active leagues request");
 

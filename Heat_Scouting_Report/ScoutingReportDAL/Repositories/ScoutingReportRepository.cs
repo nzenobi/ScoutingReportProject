@@ -141,17 +141,24 @@ namespace ScoutingReportDAL.Repositories
 
         public async Task<List<ScoutingReport>> RetrieveScoutingReportByScoutId(string scoutId)
         {
-            IQueryable<ScoutingReportQueryResult> scoutingReportQuery = from scoutingReport in _dbContext.ScoutingReports
-                       join player in _dbContext.Players 
-                        on scoutingReport.PlayerId equals player.PlayerKey
-                       join tp in _dbContext.TeamPlayers
-                        on player.PlayerKey equals tp.PlayerKey
-                       join team in _dbContext.Teams
-                        on tp.TeamKey equals team.TeamKey
-                       where tp.ActiveTeamFlg == true
-                       where scoutingReport.IsActive == true
-                       where scoutingReport.ScoutId == scoutId
-                        select new ScoutingReportQueryResult() { ScoutingReport = scoutingReport, Player = player, TeamPlayer = tp, Team = team};
+            IQueryable<ScoutingReportQueryResult> scoutingReportQuery = _dbContext.ScoutingReports
+                .Distinct()
+                .Join(_dbContext.Players,
+                scoutingReport => scoutingReport.PlayerId,
+                player => player.PlayerKey,
+                (scoutingReport, player) => new { ScoutingReport = scoutingReport, Player = player })
+                .Join(_dbContext.TeamPlayers,
+                x => x.Player.PlayerKey,
+                tp => tp.PlayerKey,
+                (x, tp) => new { x.ScoutingReport, x.Player, TeamPlayer = tp })
+                .Join(_dbContext.Teams,
+                x => x.TeamPlayer.TeamKey,
+                team => team.TeamKey,
+                (x, team) => new { x.ScoutingReport, x.Player, x.TeamPlayer, Team = team })
+                .Where(x => x.TeamPlayer.ActiveTeamFlg == true)
+                .Where(x => x.ScoutingReport.IsActive == true)
+                .Where(x => x.ScoutingReport.ScoutId == scoutId)
+                .Select(x => new ScoutingReportQueryResult() { ScoutingReport = x.ScoutingReport, Player = x.Player, TeamPlayer = x.TeamPlayer, Team = x.Team });
 
             List<ScoutingReportQueryResult> scoutingReportQueryResults = await scoutingReportQuery.ToListAsync();
 

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScoutingReportServices", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScoutingReportModels", "ScoutingReportModels\ScoutingReportModels.csproj", "{9DA2587E-F29E-4569-8A84-AA5737C9DEFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingReportDAL", "ScoutingReportDAL\ScoutingReportDAL.csproj", "{0BA7DCA8-4CC9-4903-8644-59E52906522C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScoutingReportDAL", "ScoutingReportDAL\ScoutingReportDAL.csproj", "{0BA7DCA8-4CC9-4903-8644-59E52906522C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingReportTests", "ScoutingReportTests\ScoutingReportTests.csproj", "{494C4950-17DC-406C-A608-1FC8B4C18837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0BA7DCA8-4CC9-4903-8644-59E52906522C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BA7DCA8-4CC9-4903-8644-59E52906522C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BA7DCA8-4CC9-4903-8644-59E52906522C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494C4950-17DC-406C-A608-1FC8B4C18837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494C4950-17DC-406C-A608-1FC8B4C18837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494C4950-17DC-406C-A608-1FC8B4C18837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494C4950-17DC-406C-A608-1FC8B4C18837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
