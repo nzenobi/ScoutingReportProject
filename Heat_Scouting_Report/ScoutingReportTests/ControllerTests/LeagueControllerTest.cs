@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ScoutingReportTests
+namespace ScoutingReportTests.ControllerTests
 {
     [TestClass]
     public class LeagueControllerTest

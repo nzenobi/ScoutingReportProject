@@ -14,10 +14,10 @@ namespace Heat_Scouting_Report.Controllers
     [Route("api/teams")]
     public class TeamController : ControllerBase
     {
-        private readonly ILogger<LeagueController> _logger;
+        private readonly ILogger<TeamController> _logger;
         private readonly ITeamService _teamService;
 
-        public TeamController(ILogger<LeagueController> logger, ITeamService teamService)
+        public TeamController(ILogger<TeamController> logger, ITeamService teamService)
         {
             _logger = logger;
             _teamService = teamService;

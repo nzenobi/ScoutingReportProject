@@ -98,7 +98,7 @@ namespace Heat_Scouting_Report.Controllers
 
         [HttpGet]
         [Route("{scoutId}")]
-        public async Task<ActionResult<List<ScoutingReportResponse>>>  GetScoutingReport(string scoutId)
+        public async Task<ActionResult>  GetScoutingReport(string scoutId)
         {
             _logger.LogInformation($"Incoming get scouting report request for scout: {scoutId}");
 
@@ -106,7 +106,7 @@ namespace Heat_Scouting_Report.Controllers
 
             if(scoutingReports != null)
             {
-                return scoutingReports;
+                return StatusCode(StatusCodes.Status200OK, scoutingReports); ;
             }
             else
             {
