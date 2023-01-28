@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -13,7 +14,9 @@ namespace ScoutingReportModels
         public bool? ActiveTeamFlg { get; set; }
         public DateTime DwhInsertDatetime { get; set; }
 
+        [JsonIgnore]
         public virtual Player PlayerKeyNavigation { get; set; }
+        [JsonIgnore]
         public virtual Team TeamKeyNavigation { get; set; }
     }
 }

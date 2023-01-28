@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScoutingReportDAL.Db;
 using ScoutingReportModels;
+using ScoutingReportModels.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,30 +50,33 @@ namespace ScoutingReportDAL.Repositories
             return await _dbContext.Users.Where(u => u.ActiveFlag == true).ToListAsync();
         }
 
-        public List<Player> GetPlayers(ActivePlayerRequest activePlayerRequest)
+        public async Task<List<Player>> GetPlayers(ActivePlayerRequest activePlayerRequest)
         {
-            var playerQuery = from players in _dbContext.Players
-                              join tp in _dbContext.TeamPlayers
-                              on players.PlayerKey equals tp.PlayerKey
-                              where tp.ActiveTeamFlg == true
-                              select players;
-
+            IQueryable<ActivePlayerQueryResults> activePlayerQuery = _dbContext.Players.Join(_dbContext.TeamPlayers,
+                                        p => p.PlayerKey,
+                                        tp => tp.PlayerKey,
+                                        (p, tp) => new { p, tp })
+                                .Join(_dbContext.Teams,
+                                        x => x.tp.TeamKey,
+                                        t => t.TeamKey,
+                                        (x, t) => new { x.p, x.tp, t })
+                                .Select(x => new ActivePlayerQueryResults() { Player = x.p, TeamPlayer = x.tp, Team = x.t });
 
             if (!String.IsNullOrEmpty(activePlayerRequest.FirstName))
             {
-                playerQuery = playerQuery.Where(p => p.FirstName.Contains(activePlayerRequest.FirstName));
+                activePlayerQuery = activePlayerQuery.Where(p => p.Player.FirstName.Contains(activePlayerRequest.FirstName));
             }
             if (!String.IsNullOrEmpty(activePlayerRequest.LastName))
             {
-                playerQuery = playerQuery.Where(p => p.LastName.Contains(activePlayerRequest.LastName));
+                activePlayerQuery = activePlayerQuery.Where(p => p.Player.LastName.Contains(activePlayerRequest.LastName));
             }
             if (activePlayerRequest.Season > 0)
             {
-                playerQuery = playerQuery.Where(p => p.TeamPlayers.Any(tp => tp.SeasonKey == activePlayerRequest.Season && tp.ActiveTeamFlg == true)); // Lets get confirmation here
+                activePlayerQuery = activePlayerQuery.Where(p => p.TeamPlayer.SeasonKey == activePlayerRequest.Season);
             }
 
-            var results = playerQuery.ToList();
-            return results;
+            List<ActivePlayerQueryResults> results = await activePlayerQuery.ToListAsync();
+            return results.Select(r => r.Player).Distinct().ToList();
         }
 
         public async Task DeleteScoutingReport(Guid scoutingReportId)

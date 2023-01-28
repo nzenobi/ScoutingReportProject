@@ -34,10 +34,34 @@ namespace ScoutingReportServices
             }
         }
 
-        public List<Player> GetPlayerList(ActivePlayerRequest activePlayerRequest)
+        public async Task<ActivePlayerResponse> GetPlayerList(ActivePlayerRequest activePlayerRequest)
         {
-            var players = _scoutingReportRepository.GetPlayers(activePlayerRequest);
-            return players;
+            try
+            {
+                ActivePlayerResponse activePlayerResponses = new ActivePlayerResponse();
+                List<Player> players = await _scoutingReportRepository.GetPlayers(activePlayerRequest);
+
+                if(players != null)
+                {
+                    activePlayerResponses.ActivePlayers = new List<ActivePlayer>();
+                    foreach (Player player in players)
+                    {
+                        ActivePlayer activePlayer = new ActivePlayer();
+                        activePlayer.Player = player;
+
+                        activePlayer.TeamList = player.TeamPlayers.GroupBy(tp => tp.SeasonKey).ToDictionary(tp => tp.Key, tp => tp.Select(tp => tp.TeamKeyNavigation).ToList());
+
+                        activePlayerResponses.ActivePlayers.Add(activePlayer);
+                    }
+                }
+
+                return activePlayerResponses;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching active players", ex);
+                return null;
+            }
         }
         
     }

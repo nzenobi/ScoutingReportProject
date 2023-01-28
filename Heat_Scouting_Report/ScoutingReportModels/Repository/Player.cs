@@ -55,7 +55,6 @@ namespace ScoutingReportModels
         public string Hand { get; set; }
         public bool IsCustomData { get; set; }
         public string HandednessSource { get; set; }
-
         [JsonIgnore]
         public virtual ICollection<TeamPlayer> TeamPlayers { get; set; }
         [JsonIgnore]

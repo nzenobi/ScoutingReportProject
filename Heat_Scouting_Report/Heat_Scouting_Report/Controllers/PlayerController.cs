@@ -46,13 +46,20 @@ namespace Heat_Scouting_Report.Controllers
 
 
         [HttpGet]
-        public List<Player> QueryPlayers([FromQuery] ActivePlayerRequest activePlayerRequest)
+        public async Task<ActionResult> QueryPlayers([FromQuery] ActivePlayerRequest activePlayerRequest)
         {
             _logger.LogInformation($"Incoming player search request: {activePlayerRequest.ToString()}");
 
-            var results = _playerService.GetPlayerList(activePlayerRequest);
+            ActivePlayerResponse activePlayerResponse = await _playerService.GetPlayerList(activePlayerRequest);
 
-            return results;
+            if (activePlayerResponse != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, activePlayerResponse);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching active players" });
+            }
         }
 
     }
