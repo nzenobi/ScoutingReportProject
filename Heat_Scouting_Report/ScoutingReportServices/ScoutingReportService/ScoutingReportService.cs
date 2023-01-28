@@ -83,8 +83,6 @@ namespace ScoutingReportServices
                 }
             }
 
-            //Dictionary<int, List<ScoutingReport>> groupedScoutingReports = reports.GroupBy(reports => reports.Player.TeamPlayers.FirstOrDefault().TeamKey).ToDictionary(g => g.Key, g => g.ToList());
-
             foreach (KeyValuePair<Team, List<ScoutingReport>> entry in groupedScoutingReports)
             {
                 ScoutingReportResponse scoutingReportResponse = new ScoutingReportResponse();
