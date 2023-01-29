@@ -75,6 +75,7 @@ namespace ScoutingReportServices
                     {
                         if (groupedScoutingReports.ContainsKey(teamPlayer.TeamKeyNavigation))
                         {
+                            // Group scouting report into team bucket
                             if (!groupedScoutingReports[teamPlayer.TeamKeyNavigation].Any(r => r.ScoutingReportId == report.ScoutingReportId))
                             {
                                 groupedScoutingReports[teamPlayer.TeamKeyNavigation].Add(report);
@@ -98,7 +99,7 @@ namespace ScoutingReportServices
 
                 Team team = entry.Key;
 
-
+                // Add team info
                 scoutingReportTeamResponse.Conference = team.Conference;
                 scoutingReportTeamResponse.NickName = team.TeamNickname;
                 scoutingReportTeamResponse.TeamId = team.TeamKey;
@@ -108,11 +109,13 @@ namespace ScoutingReportServices
 
                 foreach (KeyValuePair<Player, List<ScoutingReport>> playerReportEntry in groupedByPlayer)
                 {
+                    // Populate player data inside team bucket
                     PlayerScoutingReportResponse playerScoutingReport = new PlayerScoutingReportResponse();
                     playerScoutingReport.PlayerId = playerReportEntry.Key.PlayerKey;
                     playerScoutingReport.PlayerName = playerReportEntry.Key.FirstName + " " + playerReportEntry.Key.LastName;
                     playerScoutingReport.DOB = playerReportEntry.Key.BirthDate == null ? "N/A" : playerReportEntry.Key.BirthDate.Value.ToShortDateString();
 
+                    // Add scouting report data
                     playerScoutingReport.Reports = new List<ScoutingReportsResponse>();
                     foreach(ScoutingReport report in playerReportEntry.Value)
                     {
