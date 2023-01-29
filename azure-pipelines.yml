@@ -34,7 +34,6 @@ steps:
     publishWebProjects: false
     projects: '**/Heat_Scouting_Report.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: false
   
 - task: PublishBuildArtifacts@1
   inputs:
