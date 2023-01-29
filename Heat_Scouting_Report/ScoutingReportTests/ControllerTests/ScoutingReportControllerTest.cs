@@ -135,7 +135,7 @@ namespace ScoutingReportTests.ControllerTests
         [TestMethod]
         public async Task GetScoutingReport_ReturnsSuccessOnNonNullResponse()
         {
-            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult(new List<ScoutingReportResponse>()));
+            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult(new ScoutingReportResponse()));
             var responseFromController = (ObjectResult)await scoutingReportController.GetScoutingReport("10");
             Assert.AreEqual(200, responseFromController.StatusCode);
         }
@@ -143,7 +143,7 @@ namespace ScoutingReportTests.ControllerTests
         [TestMethod]
         public async Task GetScoutingReport_Returns500OnNullResponse()
         {
-            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult((List<ScoutingReportResponse>) null));
+            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult((ScoutingReportResponse) null));
             var responseFromController = (ObjectResult)await scoutingReportController.GetScoutingReport("10");
             Assert.AreEqual(500, responseFromController.StatusCode);
         }
@@ -151,11 +151,11 @@ namespace ScoutingReportTests.ControllerTests
         [TestMethod]
         public async Task GetScoutingReport_ReturnsErrorMessageOn500Response()
         {
-            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult((List<ScoutingReportResponse>)null));
+            mockScoutingReportService.Setup(x => x.GetScoutingReportResponse("10")).Returns(Task.FromResult((ScoutingReportResponse)null));
             var responseFromController = (ObjectResult)await scoutingReportController.GetScoutingReport("10");
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error fetching scouting report", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual("Error fetching scouting reports", errorMessage.Message); // TODO Make constant
         }
         #endregion
     }

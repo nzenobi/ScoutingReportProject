@@ -102,7 +102,7 @@ namespace Heat_Scouting_Report.Controllers
         {
             _logger.LogInformation($"Incoming get scouting report request for scout: {scoutId}");
 
-            List<ScoutingReportResponse> scoutingReports = await _scoutingReportService.GetScoutingReportResponse(scoutId);
+            ScoutingReportResponse scoutingReports = await _scoutingReportService.GetScoutingReportResponse(scoutId);
 
             if(scoutingReports != null)
             {
@@ -110,7 +110,7 @@ namespace Heat_Scouting_Report.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching scouting report" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching scouting reports" });
             }
         }
 

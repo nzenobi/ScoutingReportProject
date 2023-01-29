@@ -47,7 +47,7 @@ namespace ScoutingReportServices
         }
 
 
-        public async Task<List<ScoutingReportResponse>> GetScoutingReportResponse(string scoutId)
+        public async Task<ScoutingReportResponse> GetScoutingReportResponse(string scoutId)
         {
             List<ScoutingReport> reports = new List<ScoutingReport>();
             try
@@ -59,41 +59,50 @@ namespace ScoutingReportServices
                 _logger.LogError("Error fetching scouting reports", ex);
                 return null;
             }
-
-            List<ScoutingReportResponse> scoutingReportResponses = new List<ScoutingReportResponse>();
+            ScoutingReportResponse scoutingReportResponse = new ScoutingReportResponse();
+            List<ScoutingReportTeamResponse> scoutingReportTeamResponses = new List<ScoutingReportTeamResponse>();
 
             // Manually group up scouting reports by team. Must do this to deal with the case where players have multiple 
             // active teams (Player ID: 91492). In this case we are going to show the scouting report under both teams.
             Dictionary<Team, List<ScoutingReport>> groupedScoutingReports = new Dictionary<Team, List<ScoutingReport>>();
             foreach (ScoutingReport report in reports)
             {
-                foreach(TeamPlayer teamPlayer in report.Player.TeamPlayers)
+                // If a player has no active teams, we will add them to a free agent list of scouting reports
+                List<TeamPlayer> activeTeams = report.Player.TeamPlayers.Where(tp => tp.ActiveTeamFlg == true).ToList();
+                if (activeTeams != null && activeTeams.Count > 0)
                 {
-                    if(groupedScoutingReports.ContainsKey(teamPlayer.TeamKeyNavigation))
+                    foreach (TeamPlayer teamPlayer in activeTeams)
                     {
-                        if(!groupedScoutingReports[teamPlayer.TeamKeyNavigation].Any(r => r.ScoutingReportId == report.ScoutingReportId))
+                        if (groupedScoutingReports.ContainsKey(teamPlayer.TeamKeyNavigation))
                         {
-                            groupedScoutingReports[teamPlayer.TeamKeyNavigation].Add(report);
+                            if (!groupedScoutingReports[teamPlayer.TeamKeyNavigation].Any(r => r.ScoutingReportId == report.ScoutingReportId))
+                            {
+                                groupedScoutingReports[teamPlayer.TeamKeyNavigation].Add(report);
+                            }
+                        }
+                        else
+                        {
+                            groupedScoutingReports[teamPlayer.TeamKeyNavigation] = new List<ScoutingReport>() { report };
                         }
                     }
-                    else
-                    {
-                        groupedScoutingReports[teamPlayer.TeamKeyNavigation] = new List<ScoutingReport>() { report };
-                    }
+                }
+                else
+                {
+                    scoutingReportResponse.FreeAgentReports.Add(MapScoutingReportToResponse(report, scoutId));
                 }
             }
 
             foreach (KeyValuePair<Team, List<ScoutingReport>> entry in groupedScoutingReports)
             {
-                ScoutingReportResponse scoutingReportResponse = new ScoutingReportResponse();
+                ScoutingReportTeamResponse scoutingReportTeamResponse = new ScoutingReportTeamResponse();
 
                 Team team = entry.Key;
 
 
-                scoutingReportResponse.conference = team.Conference;
-                scoutingReportResponse.nickName = team.TeamNickname;
-                scoutingReportResponse.teamId = team.TeamKey;
-                scoutingReportResponse.players = new List<PlayerScoutingReportResponse>();
+                scoutingReportTeamResponse.conference = team.Conference;
+                scoutingReportTeamResponse.nickName = team.TeamNickname;
+                scoutingReportTeamResponse.teamId = team.TeamKey;
+                scoutingReportTeamResponse.players = new List<PlayerScoutingReportResponse>();
 
                 Dictionary<Player, List<ScoutingReport>> groupedByPlayer = entry.Value.GroupBy(p => p.Player).ToDictionary(g => g.Key, g => g.ToList());
 
@@ -107,24 +116,32 @@ namespace ScoutingReportServices
                     playerScoutingReport.reports = new List<ScoutingReportsResponse>();
                     foreach(ScoutingReport report in playerReportEntry.Value)
                     {
-                        ScoutingReportsResponse scoutingReport = new ScoutingReportsResponse();
-                        scoutingReport.ScoutingReportId = report.ScoutingReportId;
-                        scoutingReport.comments = report.Comments;
-                        scoutingReport.createdDateTime = report.CreatedDateTime.ToString("MM/dd/yyyy h:mm tt");
-                        scoutingReport.ModifiedDateTime = report.ModifiedDateTime != null ? report.ModifiedDateTime.Value.ToString("MM/dd/yyyy h:mm tt") : null;
-                        scoutingReport.defense = report.Defense;
-                        scoutingReport.rebound = report.Rebound;
-                        scoutingReport.shooting = report.Shooting;
-                        scoutingReport.scoutId = scoutId;
-                        playerScoutingReport.reports.Add(scoutingReport);
+                        playerScoutingReport.reports.Add(MapScoutingReportToResponse(report, scoutId));
                     }
 
-                    scoutingReportResponse.players.Add(playerScoutingReport);
+                    scoutingReportTeamResponse.players.Add(playerScoutingReport);
                 }
-                scoutingReportResponses.Add(scoutingReportResponse);
+                scoutingReportTeamResponses.Add(scoutingReportTeamResponse);
             }
 
-            return scoutingReportResponses;
+            scoutingReportResponse.TeamPlayerReports = scoutingReportTeamResponses;
+
+            return scoutingReportResponse;
+        }
+
+        private ScoutingReportsResponse MapScoutingReportToResponse(ScoutingReport report, string scoutId)
+        {
+            ScoutingReportsResponse scoutingReport = new ScoutingReportsResponse();
+            scoutingReport.ScoutingReportId = report.ScoutingReportId;
+            scoutingReport.comments = report.Comments;
+            scoutingReport.createdDateTime = report.CreatedDateTime.ToString("MM/dd/yyyy h:mm tt");
+            scoutingReport.ModifiedDateTime = report.ModifiedDateTime != null ? report.ModifiedDateTime.Value.ToString("MM/dd/yyyy h:mm tt") : null;
+            scoutingReport.defense = report.Defense;
+            scoutingReport.rebound = report.Rebound;
+            scoutingReport.shooting = report.Shooting;
+            scoutingReport.scoutId = scoutId;
+
+            return scoutingReport;
         }
 
         public async Task<ScoutingReport> CreateScoutingReport(ScoutingReportRequest scoutingReportRequest)

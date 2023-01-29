@@ -5,6 +5,16 @@ namespace ScoutingReportModels
 {
     public class ScoutingReportResponse
     {
+        public ScoutingReportResponse()
+        {
+            TeamPlayerReports = new List<ScoutingReportTeamResponse>();
+            FreeAgentReports = new List<ScoutingReportsResponse>();
+        }
+        public List<ScoutingReportTeamResponse> TeamPlayerReports { get; set; }
+        public List<ScoutingReportsResponse> FreeAgentReports { get; set; }
+    }
+    public class ScoutingReportTeamResponse
+    {
         public int teamId { get; set; }
         public string nickName { get; set; }
         public string conference { get; set; }

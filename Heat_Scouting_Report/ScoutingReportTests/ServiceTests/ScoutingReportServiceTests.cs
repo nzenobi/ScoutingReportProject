@@ -46,6 +46,7 @@ namespace ScoutingReportTests.ServiceTests
                         {
                             new TeamPlayer
                             {
+                                ActiveTeamFlg = true,
                                 TeamKeyNavigation = new Team
                                 {
                                     TeamKey = 2,
@@ -204,22 +205,22 @@ namespace ScoutingReportTests.ServiceTests
             var result = await _scoutingReportService.GetScoutingReportResponse(scoutId);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(1, result.TeamPlayerReports.Count);
 
             // Assert Team
-            var firstReportResponse = result.First();
+            var firstReportResponse = result.TeamPlayerReports.First();
             Assert.AreEqual("West", firstReportResponse.conference);
             Assert.AreEqual("Test team", firstReportResponse.nickName);
             Assert.AreEqual(2, firstReportResponse.teamId);
 
             // Assert Player
-            var player = result.FirstOrDefault().players.FirstOrDefault();
+            var player = result.TeamPlayerReports.FirstOrDefault().players.FirstOrDefault();
             Assert.AreEqual(100, player.playerId);
             Assert.AreEqual("Carson Edwards", player.playerName);
             Assert.AreEqual("1/1/1996", player.dob);
 
             // Assert Report
-            var report = result.FirstOrDefault().players.FirstOrDefault().reports.FirstOrDefault();
+            var report = result.TeamPlayerReports.FirstOrDefault().players.FirstOrDefault().reports.FirstOrDefault();
             Assert.AreEqual("Test report", report.comments);
             Assert.AreEqual(8, report.shooting);
             Assert.AreEqual(4, report.rebound);

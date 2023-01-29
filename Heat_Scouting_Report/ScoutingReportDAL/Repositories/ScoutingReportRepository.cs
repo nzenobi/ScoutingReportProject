@@ -155,14 +155,15 @@ namespace ScoutingReportDAL.Repositories
                 x => x.TeamPlayer.TeamKey,
                 team => team.TeamKey,
                 (x, team) => new { x.ScoutingReport, x.Player, x.TeamPlayer, Team = team })
-                .Where(x => x.TeamPlayer.ActiveTeamFlg == true)
                 .Where(x => x.ScoutingReport.IsActive == true)
                 .Where(x => x.ScoutingReport.ScoutId == scoutId)
                 .Select(x => new ScoutingReportQueryResult() { ScoutingReport = x.ScoutingReport, Player = x.Player, TeamPlayer = x.TeamPlayer, Team = x.Team });
 
             List<ScoutingReportQueryResult> scoutingReportQueryResults = await scoutingReportQuery.ToListAsync();
 
-            return scoutingReportQueryResults.Select(r => r.ScoutingReport).ToList();
+            Dictionary<Guid, List<ScoutingReport>> scoutingReportList = scoutingReportQueryResults.Select(r => r.ScoutingReport).GroupBy(r => r.ScoutingReportId).ToDictionary(sr => sr.Key, sr => sr.ToList());
+
+            return scoutingReportList.Select(x => x.Value.First()).ToList();
         }
 
     }
