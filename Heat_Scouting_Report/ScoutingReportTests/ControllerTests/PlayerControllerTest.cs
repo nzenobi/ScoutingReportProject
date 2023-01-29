@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.Controllers;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -54,7 +55,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await playerController.GetRoster(rosterRequest);
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error fetching roster", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.Roster, errorMessage.Message); // TODO Make constant
         }
 
 
@@ -81,7 +82,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await playerController.QueryPlayers(activePlayerRequest);
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error fetching active players", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.Players, errorMessage.Message); // TODO Make constant
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.RequestValidation;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,7 @@ namespace Heat_Scouting_Report.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching active scouts" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.ActiveScouts });
             }
         }
 

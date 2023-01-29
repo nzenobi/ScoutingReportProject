@@ -209,22 +209,22 @@ namespace ScoutingReportTests.ServiceTests
 
             // Assert Team
             var firstReportResponse = result.TeamPlayerReports.First();
-            Assert.AreEqual("West", firstReportResponse.conference);
-            Assert.AreEqual("Test team", firstReportResponse.nickName);
-            Assert.AreEqual(2, firstReportResponse.teamId);
+            Assert.AreEqual("West", firstReportResponse.Conference);
+            Assert.AreEqual("Test team", firstReportResponse.NickName);
+            Assert.AreEqual(2, firstReportResponse.TeamId);
 
             // Assert Player
-            var player = result.TeamPlayerReports.FirstOrDefault().players.FirstOrDefault();
-            Assert.AreEqual(100, player.playerId);
-            Assert.AreEqual("Carson Edwards", player.playerName);
-            Assert.AreEqual("1/1/1996", player.dob);
+            var player = result.TeamPlayerReports.FirstOrDefault().Players.FirstOrDefault();
+            Assert.AreEqual(100, player.PlayerId);
+            Assert.AreEqual("Carson Edwards", player.PlayerName);
+            Assert.AreEqual("1/1/1996", player.DOB);
 
             // Assert Report
-            var report = result.TeamPlayerReports.FirstOrDefault().players.FirstOrDefault().reports.FirstOrDefault();
-            Assert.AreEqual("Test report", report.comments);
-            Assert.AreEqual(8, report.shooting);
-            Assert.AreEqual(4, report.rebound);
-            Assert.AreEqual(5, report.defense);
+            var report = result.TeamPlayerReports.FirstOrDefault().Players.FirstOrDefault().Reports.FirstOrDefault();
+            Assert.AreEqual("Test report", report.Comments);
+            Assert.AreEqual(8, report.Shooting);
+            Assert.AreEqual(4, report.Rebound);
+            Assert.AreEqual(5, report.Defense);
         }
 
         [TestMethod]

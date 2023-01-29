@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.RequestValidation;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -41,7 +42,7 @@ namespace Heat_Scouting_Report.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error updating scouting report" });
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.UpdateScoutingReport });
                 }
             }
             else
@@ -65,7 +66,7 @@ namespace Heat_Scouting_Report.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error deleting scouting report" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.DeleteScoutingReport });
             }
 
         }
@@ -86,7 +87,7 @@ namespace Heat_Scouting_Report.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error creating scouting report" });
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.CreateScoutingReport });
                 }
             }
             else
@@ -110,7 +111,7 @@ namespace Heat_Scouting_Report.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error fetching scouting reports" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.GetScoutingReport });
             }
         }
 

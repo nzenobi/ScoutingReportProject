@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.Controllers;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,7 +31,7 @@ namespace ScoutingReportTests.ControllerTests
         }
 
         [TestMethod]
-        public async Task GetTeamsByLeagueId_ReturnsSuccessOnNonNullResponse()
+        public async Task GetActiveScouts_ReturnsSuccessOnNonNullResponse()
         {
             mockUserService.Setup(x => x.GetActiveScouts()).Returns(Task.FromResult(new List<ScoutResponse>()));
             var responseFromController = (ObjectResult)await userController.GetActiveScouts();
@@ -38,7 +39,7 @@ namespace ScoutingReportTests.ControllerTests
         }
 
         [TestMethod]
-        public async Task GetTeamsByLeagueId_Returns500OnNullResponse()
+        public async Task GetActiveScouts_Returns500OnNullResponse()
         {
             mockUserService.Setup(x => x.GetActiveScouts()).Returns(Task.FromResult((List<ScoutResponse>)null));
             var responseFromController = (ObjectResult)await userController.GetActiveScouts();
@@ -46,13 +47,13 @@ namespace ScoutingReportTests.ControllerTests
         }
 
         [TestMethod]
-        public async Task GetTeamsByLeagueId_ReturnsErrorMessageOnNullResponse()
+        public async Task GetActiveScouts_ReturnsErrorMessageOnNullResponse()
         {
             mockUserService.Setup(x => x.GetActiveScouts()).Returns(Task.FromResult((List<ScoutResponse>)null));
             var responseFromController = (ObjectResult)await userController.GetActiveScouts();
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error fetching active scouts", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.ActiveScouts, errorMessage.Message); // TODO Make constant
         }
     }
 }

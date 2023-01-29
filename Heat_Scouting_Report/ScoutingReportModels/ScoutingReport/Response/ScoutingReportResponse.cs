@@ -15,30 +15,30 @@ namespace ScoutingReportModels
     }
     public class ScoutingReportTeamResponse
     {
-        public int teamId { get; set; }
-        public string nickName { get; set; }
-        public string conference { get; set; }
-        public List<PlayerScoutingReportResponse> players { get; set; }
+        public int TeamId { get; set; }
+        public string NickName { get; set; }
+        public string Conference { get; set; }
+        public List<PlayerScoutingReportResponse> Players { get; set; }
     }
 
 
     public class PlayerScoutingReportResponse
     {
-        public int playerId { get; set; }
-        public string playerName { get; set; }
-        public string dob { get; set; }
-        public List<ScoutingReportsResponse> reports { get; set; }
+        public int PlayerId { get; set; }
+        public string PlayerName { get; set; }
+        public string DOB { get; set; }
+        public List<ScoutingReportsResponse> Reports { get; set; }
     }
 
     public class ScoutingReportsResponse
     {
         public Guid ScoutingReportId { get; set; }
-        public string scoutId { get; set; }
-        public string createdDateTime { get; set; }
+        public string ScoutId { get; set; }
+        public string CreatedDateTime { get; set; }
         public string ModifiedDateTime { get; set; }
-        public string comments { get; set; }
-        public int defense { get; set; }
-        public int rebound { get; set; }
-        public int shooting { get; set; }
+        public string Comments { get; set; }
+        public int Defense { get; set; }
+        public int Rebound { get; set; }
+        public int Shooting { get; set; }
     }
 }

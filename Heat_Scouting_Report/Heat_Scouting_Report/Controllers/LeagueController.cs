@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Heat_Scouting_Report.Utilities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScoutingReportModels;
@@ -38,7 +39,7 @@ namespace Heat_Scouting_Report.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = "Error getting active leagues" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorMessage() { Message = ErrorMessageConstants.ActiveLeagues });
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.Controllers;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +52,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await teamController.GetTeamsByLeagueId(1);
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error getting teams by league Id", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.GetLeague, errorMessage.Message); // TODO Make constant
         }
     }
 }

@@ -99,27 +99,27 @@ namespace ScoutingReportServices
                 Team team = entry.Key;
 
 
-                scoutingReportTeamResponse.conference = team.Conference;
-                scoutingReportTeamResponse.nickName = team.TeamNickname;
-                scoutingReportTeamResponse.teamId = team.TeamKey;
-                scoutingReportTeamResponse.players = new List<PlayerScoutingReportResponse>();
+                scoutingReportTeamResponse.Conference = team.Conference;
+                scoutingReportTeamResponse.NickName = team.TeamNickname;
+                scoutingReportTeamResponse.TeamId = team.TeamKey;
+                scoutingReportTeamResponse.Players = new List<PlayerScoutingReportResponse>();
 
                 Dictionary<Player, List<ScoutingReport>> groupedByPlayer = entry.Value.GroupBy(p => p.Player).ToDictionary(g => g.Key, g => g.ToList());
 
                 foreach (KeyValuePair<Player, List<ScoutingReport>> playerReportEntry in groupedByPlayer)
                 {
                     PlayerScoutingReportResponse playerScoutingReport = new PlayerScoutingReportResponse();
-                    playerScoutingReport.playerId = playerReportEntry.Key.PlayerKey;
-                    playerScoutingReport.playerName = playerReportEntry.Key.FirstName + " " + playerReportEntry.Key.LastName;
-                    playerScoutingReport.dob = playerReportEntry.Key.BirthDate == null ? "N/A" : playerReportEntry.Key.BirthDate.Value.ToShortDateString();
+                    playerScoutingReport.PlayerId = playerReportEntry.Key.PlayerKey;
+                    playerScoutingReport.PlayerName = playerReportEntry.Key.FirstName + " " + playerReportEntry.Key.LastName;
+                    playerScoutingReport.DOB = playerReportEntry.Key.BirthDate == null ? "N/A" : playerReportEntry.Key.BirthDate.Value.ToShortDateString();
 
-                    playerScoutingReport.reports = new List<ScoutingReportsResponse>();
+                    playerScoutingReport.Reports = new List<ScoutingReportsResponse>();
                     foreach(ScoutingReport report in playerReportEntry.Value)
                     {
-                        playerScoutingReport.reports.Add(MapScoutingReportToResponse(report, scoutId));
+                        playerScoutingReport.Reports.Add(MapScoutingReportToResponse(report, scoutId));
                     }
 
-                    scoutingReportTeamResponse.players.Add(playerScoutingReport);
+                    scoutingReportTeamResponse.Players.Add(playerScoutingReport);
                 }
                 scoutingReportTeamResponses.Add(scoutingReportTeamResponse);
             }
@@ -133,13 +133,13 @@ namespace ScoutingReportServices
         {
             ScoutingReportsResponse scoutingReport = new ScoutingReportsResponse();
             scoutingReport.ScoutingReportId = report.ScoutingReportId;
-            scoutingReport.comments = report.Comments;
-            scoutingReport.createdDateTime = report.CreatedDateTime.ToString("MM/dd/yyyy h:mm tt");
+            scoutingReport.Comments = report.Comments;
+            scoutingReport.CreatedDateTime = report.CreatedDateTime.ToString("MM/dd/yyyy h:mm tt");
             scoutingReport.ModifiedDateTime = report.ModifiedDateTime != null ? report.ModifiedDateTime.Value.ToString("MM/dd/yyyy h:mm tt") : null;
-            scoutingReport.defense = report.Defense;
-            scoutingReport.rebound = report.Rebound;
-            scoutingReport.shooting = report.Shooting;
-            scoutingReport.scoutId = scoutId;
+            scoutingReport.Defense = report.Defense;
+            scoutingReport.Rebound = report.Rebound;
+            scoutingReport.Shooting = report.Shooting;
+            scoutingReport.ScoutId = scoutId;
 
             return scoutingReport;
         }

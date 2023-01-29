@@ -1,4 +1,5 @@
 ﻿using Heat_Scouting_Report.Controllers;
+using Heat_Scouting_Report.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,7 +54,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await scoutingReportController.UpdateScoutingReport(scoutingReportRequest, new Guid());
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error updating scouting report", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.UpdateScoutingReport, errorMessage.Message); // TODO Make constant
         }
 
         [TestMethod]
@@ -90,7 +91,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await scoutingReportController.DeleteScoutingReport(new Guid());
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error deleting scouting report", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.DeleteScoutingReport, errorMessage.Message); // TODO Make constant
         }
         #endregion
 
@@ -118,7 +119,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await scoutingReportController.CreateScoutingReport(scoutingReportRequest);
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error creating scouting report", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.CreateScoutingReport, errorMessage.Message); // TODO Make constant
         }
 
         [TestMethod]
@@ -155,7 +156,7 @@ namespace ScoutingReportTests.ControllerTests
             var responseFromController = (ObjectResult)await scoutingReportController.GetScoutingReport("10");
 
             var errorMessage = (ErrorMessage)responseFromController.Value;
-            Assert.AreEqual("Error fetching scouting reports", errorMessage.Message); // TODO Make constant
+            Assert.AreEqual(ErrorMessageConstants.GetScoutingReport, errorMessage.Message); // TODO Make constant
         }
         #endregion
     }
