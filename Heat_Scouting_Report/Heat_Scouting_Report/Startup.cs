@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using ScoutingReportDAL.Db;
 using ScoutingReportDAL.Repositories;
 using ScoutingReportServices;
@@ -43,6 +44,17 @@ namespace Heat_Scouting_Report
             services.AddScoped<ILeagueService, LeagueService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddControllers();
+
+            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Scouting Report API",
+                    Description = "Scouting Report Rest API",
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +76,10 @@ namespace Heat_Scouting_Report
                 endpoints.MapControllers();
             });
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Showing API V1");
+            });
 
             ScoutingReportDbContext db = services.GetService<ScoutingReportDbContext>();
             db.Database.Migrate();

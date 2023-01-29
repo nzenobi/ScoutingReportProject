@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+Heat_Scouting_Report/Heat_Scouting_Report/Properties/ServiceDependencies/ScoutingReport - Web Deploy/profile.arm.json

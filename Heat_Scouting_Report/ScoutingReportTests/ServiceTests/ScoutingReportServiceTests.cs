@@ -239,4 +239,4 @@ namespace ScoutingReportTests.ServiceTests
         }
 
     }
-    }
+}
