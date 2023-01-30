@@ -78,7 +78,7 @@ namespace Heat_Scouting_Report
 
             app.UseSwagger();
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Showing API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
             });
 
             ScoutingReportDbContext db = services.GetService<ScoutingReportDbContext>();
